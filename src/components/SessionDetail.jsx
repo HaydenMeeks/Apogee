@@ -135,17 +135,21 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
             </div>
           )}
           {/* Spacer so content clears the sticky CTA */}
-          <div style={{height:90}}/>
+          <div style={{height:100}}/>
         </div>
 
         {/* Sticky CTA — above Safari bar */}
         <div style={{
-          flexShrink:0,
-          padding:'12px 16px',
-          paddingBottom:'calc(12px + env(safe-area-inset-bottom, 16px))',
-          background:'rgba(10,10,10,0.97)',
-          borderTop:`1px solid ${S.border}`,
-          backdropFilter:'blur(12px)',
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: '12px 16px',
+          paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 20px))',
+          background: 'rgba(10,10,10,0.97)',
+          borderTop: `1px solid ${S.border}`,
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
         }}>
           {isGym&&!isDone&&(
             <button onClick={()=>setWorkoutOpen(true)} style={{width:'100%',background:S.green,color:'#0A0A0A',border:'none',borderRadius:13,padding:17,fontSize:16,fontWeight:800,cursor:'pointer',letterSpacing:.3}}>
@@ -171,7 +175,7 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
         </div>
       </div>
 
-      {/* Workout modal — rendered outside the fixed container */}
+      {/* WorkoutModal — portalled to document.body via createPortal inside WorkoutModal itself */}
       {workoutOpen&&s.gymSession&&(
         <WorkoutModal
           session={s} wkIdx={wkIdx}

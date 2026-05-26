@@ -16,6 +16,18 @@ const QUICK_PROMPTS = [
   "Can you explain why this week's sessions are structured this way?",
 ];
 
+// Renders **bold**, *italic*, and `code` from Claude responses
+function renderMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__(.*?)__/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/_(.*?)_/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;font-family:DM Mono,monospace;font-size:12px">$1</code>')
+    .replace(/\n/g, '<br />');
+}
+
 export default function CoachChat({ plan, completions, weekRatings, onClose }) {
   const [messages, setMessages] = useState([
     { role: 'assistant', content: `Week ${plan ? Math.floor((new Date() - new Date(plan.meta.startDate)) / (7 * 86400000)) + 1 : 1} of your block. What do you need?` }
@@ -69,7 +81,11 @@ export default function CoachChat({ plan, completions, weekRatings, onClose }) {
               fontSize: 14, lineHeight: 1.6,
               border: m.role === 'assistant' ? `1px solid ${S.border}` : 'none',
             }}>
-              {m.content}
+              {m.role === 'assistant' ? (
+                <span dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }} />
+              ) : (
+                m.content
+              )}
             </div>
           </div>
         ))}
@@ -104,7 +120,7 @@ export default function CoachChat({ plan, completions, weekRatings, onClose }) {
       )}
 
       {/* Input */}
-      <div style={{ padding: '10px 14px calc(10px + env(safe-area-inset-bottom, 0px))', borderTop: `1px solid ${S.border}`, flexShrink: 0, display: 'flex', gap: 8 }}>
+      <div style={{ padding: '10px 14px', paddingBottom: 'calc(10px + env(safe-area-inset-bottom, 0px))', borderTop: `1px solid ${S.border}`, flexShrink: 0, display: 'flex', gap: 8 }}>
         <input
           ref={inputRef}
           value={input}

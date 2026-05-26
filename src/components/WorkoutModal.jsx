@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 
 const S = {
   bg: '#0A0A0A', surface: '#161616', card: '#222',
@@ -72,9 +73,22 @@ export default function WorkoutModal({ session: s, wkIdx, gymLog, onClose, onCom
     : gs.exercises.filter((_,i)=>log[`ex_${i}_done`]).length;
   const pct = totalSets > 0 ? Math.round((doneSets/totalSets)*100) : 0;
 
-  return (
-    <div style={{position:'fixed',inset:0,zIndex:200,background:'rgba(0,0,0,0.82)',backdropFilter:'blur(6px)',display:'flex',alignItems:'flex-end'}}
-      onClick={e=>e.target===e.currentTarget&&onClose()}>
+  const handleComplete = () => {
+    const exercises = gs.exercises.map((ex, ei) => ({
+      name: ex.name,
+      sets: parseInt(String(ex.sets)) || 3,
+      reps: ex.reps,
+      weight: log[`ex_${ei}_s0_kg`] || 0,
+      notes: log[`ex_${ei}_notes`] || '',
+    }));
+    onComplete(exercises);
+  };
+
+  const modal = (
+    <div
+      style={{position:'fixed',inset:0,zIndex:9999,background:'rgba(0,0,0,0.82)',backdropFilter:'blur(6px)',display:'flex',alignItems:'flex-end'}}
+      onClick={e=>e.target===e.currentTarget&&onClose()}
+    >
       <div style={{background:S.surface,borderRadius:'20px 20px 0 0',width:'100%',maxHeight:'94vh',display:'flex',flexDirection:'column',boxShadow:'0 -12px 48px rgba(0,0,0,.7)'}}>
 
         {/* Header */}
@@ -279,7 +293,7 @@ export default function WorkoutModal({ session: s, wkIdx, gymLog, onClose, onCom
           )}
         </div>
 
-        <div style={{padding:'12px 14px calc(12px + env(safe-area-inset-bottom,0px))',borderTop:`1px solid ${S.border}`,flexShrink:0}}>
+        <div style={{padding:'12px 14px',paddingBottom:'calc(12px + env(safe-area-inset-bottom, 16px))',borderTop:`1px solid ${S.border}`,flexShrink:0}}>
           <div style={{fontFamily:'DM Mono,monospace',fontSize:10,color:S.muted,textAlign:'center',marginBottom:8}}>
             {isME?`${doneSets} of ${totalSets} sets done`:`${doneSets} of ${totalSets} exercises done`}
           </div>
@@ -290,4 +304,6 @@ export default function WorkoutModal({ session: s, wkIdx, gymLog, onClose, onCom
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }
