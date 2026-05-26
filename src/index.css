@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Dark theme */
+  --bg:      #0A0A0A;
+  --surface: #141414;
+  --card:    #1C1C1C;
+  --border:  rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+
+  /* Text */
+  --text:    #F4F4F2;
+  --text2:   rgba(244,244,242,0.7);
+  --muted:   rgba(244,244,242,0.35);
+
+  /* Brand */
+  --green:   #00C46A;
+  --g2:      #00A858;
+  --gd:      rgba(0,196,106,0.12);
+  --gd2:     rgba(0,196,106,0.20);
+
+  /* Session types */
+  --easy:    #3B82F6;
+  --easy-d:  rgba(59,130,246,0.15);
+  --speed:   #F59E0B;
+  --speed-d: rgba(245,158,11,0.15);
+  --long:    #10B981;
+  --long-d:  rgba(16,185,129,0.15);
+  --vest:    #00C46A;
+  --vest-d:  rgba(0,196,106,0.15);
+  --b2b:     #8B5CF6;
+  --b2b-d:   rgba(139,92,246,0.15);
+  --race:    #EF4444;
+  --race-d:  rgba(239,68,68,0.15);
+  --gym:     #06B6D4;
+  --gym-d:   rgba(6,182,212,0.15);
+
+  --r:       14px;
+  --r-sm:    10px;
+  --shadow:  0 1px 3px rgba(0,0,0,0.4);
+  --shadow2: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+input, textarea, select { font-family: inherit; }
+a { text-decoration: none; color: inherit; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* Utilities */
+.mono { font-family: 'DM Mono', monospace; }
+.arch { font-family: 'Archivo Black', sans-serif; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
