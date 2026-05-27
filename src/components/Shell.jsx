@@ -94,12 +94,12 @@ export default function Shell(props) {
         {/* Mobile bottom nav */}
         <div className="mob-nav" style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(17,17,17,0.96)', borderTop: `1px solid ${S.border}`, backdropFilter: 'blur(12px)', display: 'flex', paddingBottom: 'env(safe-area-inset-bottom,0px)', zIndex: 50 }}>
           {NAV.map(n => (
-            <button key={n.id} onClick={() => setTab(n.id)} style={{ flex: 1, padding: '10px 4px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, background: 'transparent', border: 'none', cursor: 'pointer', color: tab === n.id ? S.green : 'rgba(244,244,242,0.4)', transition: 'color .15s' }}>
-              <span style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', letterSpacing: 1, fontWeight: tab === n.id ? 700 : 400 }}>{n.label.toUpperCase()}</span>
+            <button key={n.id} onClick={() => setTab(n.id)} style={{ flex: 1, padding: '14px 4px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, background: 'transparent', border: 'none', cursor: 'pointer', color: tab === n.id ? S.green : 'rgba(244,244,242,0.4)', transition: 'color .15s', minHeight: 56 }}>
+              <span style={{ fontSize: 11, fontFamily: 'DM Mono, monospace', letterSpacing: 1, fontWeight: tab === n.id ? 700 : 400 }}>{n.label.toUpperCase()}</span>
             </button>
           ))}
-          <button onClick={() => setCoachOpen(true)} style={{ flex: 1, padding: '10px 4px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, background: 'transparent', border: 'none', cursor: 'pointer', color: S.green }}>
-            <span style={{ fontSize: 9, fontFamily: 'DM Mono, monospace', letterSpacing: 1, fontWeight: 600 }}>COACH</span>
+          <button onClick={() => setCoachOpen(true)} style={{ flex: 1, padding: '14px 4px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, background: 'transparent', border: 'none', cursor: 'pointer', color: S.green, minHeight: 56 }}>
+            <span style={{ fontSize: 11, fontFamily: 'DM Mono, monospace', letterSpacing: 1, fontWeight: 600 }}>COACH</span>
           </button>
         </div>
       </div>
