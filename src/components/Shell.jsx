@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { daysTo } from '../utils.js';
 import PlanTab from './PlanTab.jsx';
 import OverviewTab from './OverviewTab.jsx';
-import { LogTab, StatsTab } from './Tabs.jsx';
+import { StatsTab } from './Tabs.jsx';
 import PlanModal from './PlanModal.jsx';
 import CoachChat from './CoachChat.jsx';
 import { signOut } from '../supabase.js';
@@ -10,7 +10,6 @@ import { signOut } from '../supabase.js';
 const NAV = [
   { id: 'plan',     label: 'Plan'     },
   { id: 'overview', label: 'Overview' },
-  { id: 'log',      label: 'Log'      },
   { id: 'stats',    label: 'Stats'    },
 ];
 
@@ -224,7 +223,6 @@ export default function Shell(props) {
         <div style={{ paddingBottom: 24, paddingTop: 'calc(52px + env(safe-area-inset-top, 0px))' }} className="tab-content">
           {tab === 'plan'     && <PlanTab     {...props} setPlanModal={setPlanModal} weekRatings={weekRatings} rateWeek={rateWeek}/>}
           {tab === 'overview' && <OverviewTab {...props}/>}
-          {tab === 'log'      && <LogTab      {...props} deleteHistoryEntry={deleteHistoryEntry}/>}
           {tab === 'stats'    && <StatsTab    {...props}/>}
         </div>
       </div>
