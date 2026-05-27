@@ -130,7 +130,7 @@ export async function loadHistoryFromDB(userId) {
 }
 
 export async function saveHistoryEntryToDB(userId, entry) {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('session_history')
     .insert({
       user_id: userId,
@@ -141,18 +141,43 @@ export async function saveHistoryEntryToDB(userId, entry) {
       dist_logged: entry.dist || null,
       notes: entry.notes || null,
       exercises: entry.exercises || null,
+    });
+  return !error;
+}
+
+// ── Exercise History ──────────────────────────────────────────────────────────
+export async function saveExerciseHistoryToDB(userId, exerciseName, sets, weekIdx, sessionId, notes = '') {
+  const { data, error } = await supabase
+    .from('exercise_history')
+    .insert({
+      user_id: userId,
+      exercise_name: exerciseName,
+      sets: sets, // [{set:1, reps:'8', kg:80}, ...]
+      week_idx: weekIdx,
+      session_id: sessionId,
+      notes,
+      logged_at: new Date().toISOString(),
     })
-    .select('id')
-    .single();
-  if (error) return null;
+    .select('id').single();
+  if (error) { console.error('exercise_history save error:', error); return null; }
   return data?.id || null;
 }
 
-export async function deleteHistoryEntryFromDB(userId, entryId) {
-  const { error } = await supabase
-    .from('session_history')
-    .delete()
+export async function loadExerciseHistoryFromDB(userId, exerciseName, limit = 3) {
+  const { data, error } = await supabase
+    .from('exercise_history')
+    .select('*')
     .eq('user_id', userId)
-    .eq('id', entryId);
-  return !error;
+    .eq('exercise_name', exerciseName)
+    .order('logged_at', { ascending: false })
+    .limit(limit);
+  if (error || !data) return [];
+  return data.map(row => ({
+    id: row.id,
+    exerciseName: row.exercise_name,
+    date: row.logged_at,
+    sets: row.sets,
+    weekIdx: row.week_idx,
+    notes: row.notes,
+  }));
 }
