@@ -181,3 +181,12 @@ export async function loadExerciseHistoryFromDB(userId, exerciseName, limit = 3)
     notes: row.notes,
   }));
 }
+
+export async function deleteHistoryEntryFromDB(userId, entryId) {
+  const { error } = await supabase
+    .from('session_history')
+    .delete()
+    .eq('id', entryId)
+    .eq('user_id', userId);
+  if (error) console.error('deleteHistoryEntry error:', error);
+}
