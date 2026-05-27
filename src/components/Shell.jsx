@@ -30,9 +30,9 @@ export default function Shell(props) {
 
       {/* ── MOBILE TOP BAR ── */}
       <div className="mob-topbar" style={{
-        position: 'sticky', top: 0, zIndex: 60,
-        background: 'rgba(10,10,10,0.92)', backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60,
+        background: 'rgba(10,10,10,0.95)', backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
         borderBottom: '1px solid rgba(255,255,255,0.08)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '10px 16px',
@@ -221,7 +221,7 @@ export default function Shell(props) {
 
       {/* ── MAIN CONTENT ── */}
       <div className="main-content" style={{ flex: 1 }}>
-        <div style={{ paddingBottom: 24 }} className="tab-content">
+        <div style={{ paddingBottom: 24, paddingTop: 'calc(52px + env(safe-area-inset-top, 0px))' }} className="tab-content">
           {tab === 'plan'     && <PlanTab     {...props} setPlanModal={setPlanModal} weekRatings={weekRatings} rateWeek={rateWeek}/>}
           {tab === 'overview' && <OverviewTab {...props}/>}
           {tab === 'log'      && <LogTab      {...props} deleteHistoryEntry={deleteHistoryEntry}/>}
