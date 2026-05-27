@@ -186,19 +186,15 @@ export default function Splash({ plan, onEnter }) {
           </div>
         </div>
 
-        {/* Race countdowns */}
-        {races.length >= 2 && (
-          <div className="cta-wrap" style={{ display:'flex', gap:28, justifyContent:'center', zIndex:2 }}>
-            {races.map((r, i) => (
-              <div key={i} style={{ textAlign:'center' }}>
-                <div style={{ fontFamily:'Archivo Black,sans-serif', fontSize:34, color:'#00C46A', lineHeight:1, textShadow:'0 0 20px rgba(0,196,106,.5)' }}>
-                  {daysTo(r.date)}
-                </div>
-                <div style={{ fontFamily:'DM Mono,monospace', fontSize:9, color:'rgba(244,244,242,.3)', letterSpacing:2, marginTop:3 }}>
-                  {r.name.split('·')[0].trim()}
-                </div>
-              </div>
-            ))}
+        {/* Race countdown — GPT only */}
+        {races.length >= 1 && (
+          <div className="cta-wrap" style={{ textAlign:'center', zIndex:2 }}>
+            <div style={{ fontFamily:'Archivo Black,sans-serif', fontSize:48, color:'#00C46A', lineHeight:1, textShadow:'0 0 20px rgba(0,196,106,.5)' }}>
+              {daysTo(races[races.length - 1].date)}
+            </div>
+            <div style={{ fontFamily:'DM Mono,monospace', fontSize:10, color:'rgba(244,244,242,.35)', letterSpacing:3, marginTop:5 }}>
+              DAYS TO GPT100
+            </div>
           </div>
         )}
 
