@@ -216,10 +216,9 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
             </button>
           )}
           {!isGym&&isDone&&(
-            <div style={{display:'flex',gap:8}}>
-              <button onClick={()=>onUntick(wkIdx,s.id)} style={{background:'var(--card)',color:'var(--muted)',border:'1px solid var(--border)',borderRadius:13,padding:'14px 18px',fontSize:14,fontWeight:600,cursor:'pointer'}}>↺</button>
-              <button onClick={()=>{handleTick();setTimeout(onBack,400);}} style={{flex:1,background:'var(--card)',color:'var(--text)',border:'1px solid var(--green)',borderRadius:13,padding:14,fontSize:14,fontWeight:700,cursor:'pointer'}}>Update Log</button>
-            </div>
+            <button onClick={()=>onUntick(wkIdx,s.id)} style={{width:'100%',background:'var(--card)',color:'var(--muted)',border:'1px solid var(--border)',borderRadius:13,padding:16,fontSize:14,fontWeight:600,cursor:'pointer'}}>
+              Mark Incomplete
+            </button>
           )}
         </div>
       </div>

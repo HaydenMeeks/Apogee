@@ -180,7 +180,7 @@ export default function Splash({ plan, onEnter }) {
             </div>
             <div className="tag-line" style={{ display:'flex', alignItems:'center', gap:14, fontFamily:'DM Mono,monospace', fontSize:12, letterSpacing:'0.5em', color:'#00C46A' }}>
               <div className="bar-l" style={{ width:28, height:1, background:'#00C46A' }}/>
-              REACH THE SUMMIT
+              ULTRA TRAINING
               <div className="bar-r" style={{ width:28, height:1, background:'#00C46A' }}/>
             </div>
           </div>
