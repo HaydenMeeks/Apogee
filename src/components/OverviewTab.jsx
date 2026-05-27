@@ -136,10 +136,9 @@ export default function OverviewTab({ plan, completions }) {
         {races.length>=2&&(
           <div style={{display:'flex',gap:8,marginBottom:14}}>
             {races.map((r,i)=>(
-              <div key={i} style={{flex:1,background:S.card,border:`1px solid ${S.border}`,borderRadius:12,padding:'12px 13px',borderLeft:'2px solid #00C46A',position:'relative',overflow:'hidden'}}>
-                <div style={{position:'absolute',top:0,left:0,right:0,height:1,background:'linear-gradient(90deg,#00C46A,transparent)'}}/>
+              <div key={i} style={{flex:1,background:S.card,border:`1px solid ${S.border}`,borderRadius:12,padding:'12px 13px'}}>
                 <div style={{fontFamily:'Archivo Black,sans-serif',fontSize:28,color:'#00C46A',lineHeight:1}}>{daysTo(r.date)}</div>
-                <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:S.muted,letterSpacing:1,marginTop:2}}>DAYS</div>
+                <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:S.muted,letterSpacing:1,marginTop:2}}>DAYS TO GO</div>
                 <div style={{fontSize:13,fontWeight:600,color:S.text,marginTop:4}}>{r.name}</div>
                 {r.goal&&<div style={{fontFamily:'DM Mono,monospace',fontSize:10,color:'#00C46A',marginTop:2}}>{r.goal}</div>}
               </div>
