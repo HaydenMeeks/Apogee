@@ -65,11 +65,18 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
           position: absolute;
           bottom: 0; left: 0; right: 0;
           padding: 12px 16px;
-          padding-bottom: calc(12px + env(safe-area-inset-bottom, 20px));
+          /* Mobile: clear the 48px bottom nav + Safari home bar */
+          padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
           background: rgba(10,10,10,0.97);
           border-top: 1px solid rgba(255,255,255,0.1);
           -webkit-backdrop-filter: blur(12px);
           backdrop-filter: blur(12px);
+        }
+        /* Desktop has no bottom nav */
+        @media (min-width: 768px) {
+          .session-cta {
+            padding-bottom: calc(12px + env(safe-area-inset-bottom, 8px));
+          }
         }
       `}</style>
       {/* Full screen layout — fixed, no scroll issues */}
@@ -86,9 +93,13 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
           <div style={{padding:'0 18px 20px'}}>
             <div style={{fontFamily:'Archivo Black,sans-serif',fontSize:28,lineHeight:1.1,letterSpacing:'-.5px',marginBottom:8}}>{s.name}</div>
             <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:14}}>
-              <Pill color={tc.color} bg={`${tc.color}30`}>{tc.label}</Pill>
-              <Pill color={s.hard?'#EF4444':S.green} bg={s.hard?'rgba(239,68,68,.2)':'rgba(0,196,106,.2)'}>{s.hard?'HARD':'EASY'}</Pill>
-              {isGym&&<Pill color="#06B6D4" bg="rgba(6,182,212,.2)">GYM</Pill>}
+              {isGym
+                ? <Pill color="#06B6D4" bg="rgba(6,182,212,.2)">GYM</Pill>
+                : <>
+                    <Pill color={tc.color} bg={`${tc.color}30`}>{tc.label}</Pill>
+                    <Pill color={s.hard?'#EF4444':S.green} bg={s.hard?'rgba(239,68,68,.2)':'rgba(0,196,106,.2)'}>{s.hard?'HARD':'EASY'}</Pill>
+                  </>
+              }
             </div>
             <div style={{display:'flex',gap:8,overflowX:'auto',scrollbarWidth:'none',paddingBottom:2}}>
               <StatChip label="DURATION" val={s.target.split('·')[0].trim()}/>
@@ -159,7 +170,7 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
             </div>
           )}
           {/* Spacer so content clears the sticky CTA */}
-          <div style={{height:100}}/>
+          <div style={{height:160}}/>
         </div>
 
         {/* Sticky CTA — above Safari bar */}
