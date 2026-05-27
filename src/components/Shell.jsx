@@ -31,7 +31,7 @@ export default function Shell(props) {
       {/* ── MOBILE TOP BAR ── */}
       <div className="mob-topbar" style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 60,
-        background: 'rgba(10,10,10,0.95)', backdropFilter: 'blur(16px)',
+        background: 'var(--surface)', backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         borderBottom: '1px solid rgba(255,255,255,0.08)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -43,12 +43,12 @@ export default function Shell(props) {
           <ShieldIcon size={32}/>
         </button>
         {/* Current tab label */}
-        <span style={{ fontFamily: 'Archivo Black, sans-serif', fontSize: 13, letterSpacing: 3, color: 'var(--text)', opacity: 0.7 }}>
+        <span style={{ fontFamily: 'Archivo Black, sans-serif', fontSize: 13, letterSpacing: 3, color: 'var(--text)' }}>
           {NAV.find(n => n.id === tab)?.label.toUpperCase() || 'PLAN'}
         </span>
         {/* Coach button */}
         <button onClick={() => setCoachOpen(true)} style={{
-          background: 'rgba(0,196,106,0.12)', border: '1px solid rgba(0,196,106,0.3)',
+          background: 'rgba(0,196,106,0.15)', border: '1px solid rgba(0,196,106,0.4)',
           color: 'var(--green)', borderRadius: 20, padding: '6px 14px',
           fontSize: 11, fontWeight: 700, fontFamily: 'DM Mono, monospace', letterSpacing: 1, cursor: 'pointer',
         }}>
