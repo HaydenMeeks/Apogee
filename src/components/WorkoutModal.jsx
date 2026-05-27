@@ -219,7 +219,10 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
               {ex?.name}
             </div>
             <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 10, color: 'var(--green)', marginTop: 3 }}>
-              {ex?.sets} × {ex?.reps}{ex?.rpe ? ` · RPE ${ex.rpe}` : ex?.load && !isME ? ` · ${ex.load}` : ''} · rest {ex?.rest}
+              {isME
+                ? `${ex?.sets} sets · ${ex?.reps} · ${ex?.rest} rest`
+                : `${ex?.sets} × ${ex?.reps}${ex?.rpe ? ` · RPE ${ex.rpe}` : ''} · rest ${ex?.rest}`
+              }
             </div>
           </div>
           {/* History button */}
@@ -256,59 +259,97 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
           </div>
         )}
 
-        {/* Sets */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {exLog.map((l, si) => (
-            <div key={si} style={{
-              display: 'grid', gridTemplateColumns: '36px 1fr 1fr 44px',
-              gap: 8, alignItems: 'center',
-              background: l.done ? 'rgba(0,196,106,0.08)' : 'var(--card)',
-              border: `1px solid ${l.done ? 'rgba(0,196,106,0.3)' : 'var(--border)'}`,
-              borderRadius: 10, padding: '10px 12px',
-              transition: 'background 0.2s',
-            }}>
-              <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 10, color: 'var(--muted)', textAlign: 'center' }}>
-                S{si + 1}
-              </div>
-              <div>
-                <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 8, color: 'var(--muted)', marginBottom: 3 }}>REPS</div>
-                <input
-                  value={l.reps}
-                  onChange={e => updateSet(si, 'reps', e.target.value)}
-                  style={{
-                    width: '100%', background: 'var(--surface)', border: '1px solid var(--border)',
-                    borderRadius: 6, color: 'var(--text)', fontSize: 15,
-                    fontFamily: 'DM Mono, monospace', padding: '6px 8px', outline: 'none',
-                  }}
-                />
-              </div>
-              <div>
-                <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 8, color: 'var(--muted)', marginBottom: 3 }}>KG</div>
-                <input
-                  value={l.kg}
-                  onChange={e => updateSet(si, 'kg', e.target.value)}
-                  placeholder="—"
-                  style={{
-                    width: '100%', background: 'var(--surface)', border: '1px solid var(--border)',
-                    borderRadius: 6, color: 'var(--text)', fontSize: 15,
-                    fontFamily: 'DM Mono, monospace', padding: '6px 8px', outline: 'none',
-                  }}
-                />
-              </div>
-              <button onClick={() => tickSet(si)} style={{
-                width: 44, height: 44, borderRadius: 10,
-                background: l.done ? 'var(--green)' : 'var(--surface)',
+        {/* Sets — ME protocol: tap to complete + auto-rest timer */}
+        {isME ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {exLog.map((l, si) => (
+              <button key={si} onClick={() => tickSet(si)} style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                background: l.done ? 'rgba(0,196,106,0.12)' : 'var(--card)',
                 border: `2px solid ${l.done ? 'var(--green)' : 'var(--border)'}`,
-                color: l.done ? '#0A0A0A' : 'var(--muted)',
-                fontSize: 16, cursor: 'pointer', display: 'flex',
-                alignItems: 'center', justifyContent: 'center',
-              }}>✓</button>
-            </div>
-          ))}
-        </div>
+                borderRadius: 12, padding: '14px 16px', cursor: 'pointer',
+                transition: 'all 0.2s', width: '100%',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{
+                    width: 32, height: 32, borderRadius: '50%',
+                    background: l.done ? 'var(--green)' : 'var(--surface)',
+                    border: `2px solid ${l.done ? 'var(--green)' : 'var(--border)'}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 14, color: l.done ? '#0A0A0A' : 'var(--muted)',
+                    flexShrink: 0,
+                  }}>
+                    {l.done ? '✓' : si + 1}
+                  </div>
+                  <div style={{ textAlign: 'left' }}>
+                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 13, color: l.done ? 'var(--green)' : 'var(--text)', fontWeight: 700 }}>
+                      SET {si + 1}
+                    </div>
+                    <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>
+                      {ex?.reps} · rest {ex?.rest}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 10, color: l.done ? 'var(--green)' : 'var(--muted)', letterSpacing: 1 }}>
+                  {l.done ? 'DONE' : 'TAP WHEN COMPLETE'}
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {exLog.map((l, si) => (
+              <div key={si} style={{
+                display: 'grid', gridTemplateColumns: '36px 1fr 1fr 44px',
+                gap: 8, alignItems: 'center',
+                background: l.done ? 'rgba(0,196,106,0.08)' : 'var(--card)',
+                border: `1px solid ${l.done ? 'rgba(0,196,106,0.3)' : 'var(--border)'}`,
+                borderRadius: 10, padding: '10px 12px',
+                transition: 'background 0.2s',
+              }}>
+                <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 10, color: 'var(--muted)', textAlign: 'center' }}>
+                  S{si + 1}
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 8, color: 'var(--muted)', marginBottom: 3 }}>REPS</div>
+                  <input
+                    value={l.reps}
+                    onChange={e => updateSet(si, 'reps', e.target.value)}
+                    style={{
+                      width: '100%', background: 'var(--surface)', border: '1px solid var(--border)',
+                      borderRadius: 6, color: 'var(--text)', fontSize: 15,
+                      fontFamily: 'DM Mono, monospace', padding: '6px 8px', outline: 'none',
+                    }}
+                  />
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 8, color: 'var(--muted)', marginBottom: 3 }}>KG</div>
+                  <input
+                    value={l.kg}
+                    onChange={e => updateSet(si, 'kg', e.target.value)}
+                    placeholder="—"
+                    style={{
+                      width: '100%', background: 'var(--surface)', border: '1px solid var(--border)',
+                      borderRadius: 6, color: 'var(--text)', fontSize: 15,
+                      fontFamily: 'DM Mono, monospace', padding: '6px 8px', outline: 'none',
+                    }}
+                  />
+                </div>
+                <button onClick={() => tickSet(si)} style={{
+                  width: 44, height: 44, borderRadius: 10,
+                  background: l.done ? 'var(--green)' : 'var(--surface)',
+                  border: `2px solid ${l.done ? 'var(--green)' : 'var(--border)'}`,
+                  color: l.done ? '#0A0A0A' : 'var(--muted)',
+                  fontSize: 16, cursor: 'pointer', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center',
+                }}>✓</button>
+              </div>
+            ))}
+          </div>
+        )}
 
-        {/* Manual rest button */}
-        {!restActive && (
+        {/* Manual rest button — strength only, ME auto-fires */}
+        {!isME && !restActive && (
           <button onClick={() => startRest(ex?.rest || '90sec')} style={{
             marginTop: 14, width: '100%', background: 'var(--card)',
             border: '1px solid var(--border)', borderRadius: 10,
