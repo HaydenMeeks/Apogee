@@ -182,10 +182,17 @@ export default function WorkoutModal({ session: s, wkIdx, gymLog, onClose, onCom
                       const setDone=!!log[`ex_${ei}_s${si}`];
                       const isNext=!setDone&&Array.from({length:si},(_,i)=>!!log[`ex_${ei}_s${i}`]).every(Boolean);
                       const tid=`me_${ei}_${si}`;
+                      const isLastSet = si === ps - 1;
+                      const isLastEx = ei === gs.exercises.length - 1;
+                      const betweenSecs = gs.between ? parseInt(String(gs.between).match(/(\d+)/)?.[1] || 60) : 60;
                       return(
                         <button key={si} onClick={()=>{
-                          if(setDone){save(`ex_${ei}_s${si}`,false);skipTimer(tid);}
-                          else{save(`ex_${ei}_s${si}`,true);if(si<ps-1)startTimer(tid,parseInt(restSecs));}
+                          if(setDone){save(`ex_${ei}_s${si}`,false);skipTimer(tid);skipTimer(`between_${ei}`);}
+                          else{
+                            save(`ex_${ei}_s${si}`,true);
+                            if(!isLastSet) startTimer(tid, parseInt(restSecs));
+                            else if(!isLastEx) startTimer(`between_${ei}`, betweenSecs);
+                          }
                         }} style={{
                           width:52,height:52,borderRadius:11,
                           background:setDone?S.green:isNext?'rgba(0,196,106,0.12)':'rgba(255,255,255,0.04)',
@@ -199,7 +206,7 @@ export default function WorkoutModal({ session: s, wkIdx, gymLog, onClose, onCom
                       );
                     })}
                   </div>
-                  {/* Active timer */}
+                  {/* Active set rest timer */}
                   {Array.from({length:ps},(_,si)=>{
                     const tid=`me_${ei}_${si}`;const t=timers[tid];if(!t)return null;
                     return(
@@ -216,6 +223,25 @@ export default function WorkoutModal({ session: s, wkIdx, gymLog, onClose, onCom
                       </div>
                     );
                   })}
+                  {/* Between-exercises timer — fires amber after last set */}
+                  {(()=>{
+                    const t=timers[`between_${ei}`];
+                    if(!t)return null;
+                    return(
+                      <div style={{borderRadius:10,overflow:'hidden',background:'#0A0A0A',border:`1.5px solid ${t.done?'#F59E0B':S.border2}`,marginTop:4}}>
+                        <div style={{height:3,background:'#F59E0B',width:t.done?'0%':`${(t.rem/t.total)*100}%`,transition:'width 1s linear'}}/>
+                        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 14px'}}>
+                          <div>
+                            <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'#F59E0B',letterSpacing:2}}>NEXT EXERCISE REST</div>
+                            {t.done
+                              ?<div style={{fontFamily:'DM Mono,monospace',fontSize:14,color:'#F59E0B',fontWeight:700,letterSpacing:2}}>NEXT EXERCISE ↓</div>
+                              :<div style={{fontFamily:'Archivo Black,sans-serif',fontSize:26,color:'#F59E0B'}}>{t.rem}s</div>}
+                          </div>
+                          {!t.done&&<button onClick={()=>skipTimer(`between_${ei}`)} style={{background:'#1C1C1C',border:`1px solid ${S.border}`,borderRadius:8,padding:'6px 14px',fontSize:11,fontFamily:'DM Mono,monospace',color:S.muted,cursor:'pointer',letterSpacing:1}}>SKIP</button>}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             );
