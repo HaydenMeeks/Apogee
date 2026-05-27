@@ -20,7 +20,8 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
   );
 
   const [activeEx, setActiveEx] = useState(0);
-  const [restTimer, setRestTimer] = useState(null); // seconds remaining
+  const [restTimer, setRestTimer] = useState(null);
+  const [restTotal, setRestTotal] = useState(null);
   const [restActive, setRestActive] = useState(false);
   const [historyEx, setHistoryEx] = useState(null); // exercise name for history modal
   const [historyData, setHistoryData] = useState([]);
@@ -40,10 +41,11 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
   function startRest(seconds) {
     const secs = parseInt(String(seconds).replace(/[^0-9]/g, '')) || 60;
     setRestTimer(secs);
+    setRestTotal(secs);
     setRestActive(true);
   }
 
-  function stopRest() { setRestActive(false); setRestTimer(null); }
+  function stopRest() { setRestActive(false); setRestTimer(null); setRestTotal(null); }
 
   // ── EXERCISE HISTORY ────────────────────────────────────────────────────────
   async function openHistory(exName) {
@@ -132,25 +134,31 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
       </div>
 
       {/* ── REST TIMER BANNER ── */}
-      {restActive && (
+      {restActive && restTotal > 0 && (
         <div style={{
-          flexShrink: 0, background: restTimer <= 5 ? '#00C46A' : 'var(--card2)',
-          padding: '10px 16px', display: 'flex', alignItems: 'center',
-          justifyContent: 'space-between', borderBottom: '1px solid var(--border)',
-          transition: 'background 0.3s',
+          flexShrink: 0, background: 'var(--card2)',
+          borderBottom: '1px solid var(--border)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontFamily: 'DM Mono, monospace', fontSize: 9, color: 'var(--muted)', letterSpacing: 2 }}>REST</span>
-            <span style={{
-              fontFamily: 'Archivo Black, sans-serif', fontSize: 28,
-              color: restTimer <= 5 ? '#0A0A0A' : 'var(--text)',
-            }}>{restTimer}s</span>
+          {/* Progress bar — green, shrinks left to right */}
+          <div style={{ height: 4, background: 'var(--border)', position: 'relative' }}>
+            <div style={{
+              position: 'absolute', top: 0, left: 0, bottom: 0,
+              background: restTimer <= 5 ? '#EF4444' : '#00C46A',
+              width: `${(restTimer / restTotal) * 100}%`,
+              transition: 'width 1s linear, background 0.3s',
+            }}/>
           </div>
-          <button onClick={stopRest} style={{
-            background: 'rgba(255,255,255,0.1)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '6px 14px', color: 'var(--text)',
-            fontSize: 12, fontFamily: 'DM Mono, monospace', cursor: 'pointer',
-          }}>SKIP</button>
+          <div style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontFamily: 'DM Mono, monospace', fontSize: 9, color: 'var(--muted)', letterSpacing: 2 }}>REST</span>
+              <span style={{ fontFamily: 'Archivo Black, sans-serif', fontSize: 28, color: restTimer <= 5 ? '#EF4444' : 'var(--text)' }}>{restTimer}s</span>
+            </div>
+            <button onClick={stopRest} style={{
+              background: 'transparent', border: '1px solid var(--border)',
+              borderRadius: 8, padding: '6px 14px', color: 'var(--muted)',
+              fontSize: 11, fontFamily: 'DM Mono, monospace', cursor: 'pointer',
+            }}>SKIP</button>
+          </div>
         </div>
       )}
 
@@ -188,7 +196,7 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
               {ex?.name}
             </div>
             <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 10, color: 'var(--green)', marginTop: 3 }}>
-              {ex?.sets} × {ex?.reps} @ {ex?.load} · rest {ex?.rest}
+              {ex?.sets} × {ex?.reps}{ex?.rpe ? ` · RPE ${ex.rpe}` : ex?.load && !isME ? ` · ${ex.load}` : ''} · rest {ex?.rest}
             </div>
           </div>
           {/* History button */}
