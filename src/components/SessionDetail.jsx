@@ -43,14 +43,18 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
       <style>{`
         .sd-wrap {
           position: fixed;
-          inset: 0;
+          /* Sit below the Shell topbar on mobile (approx 52px + safe area) */
+          top: calc(52px + env(safe-area-inset-top, 0px));
+          bottom: 0; left: 0; right: 0;
           background: var(--bg);
           z-index: 10;
           display: flex;
           flex-direction: column;
           overflow: hidden;
         }
-        @media (min-width: 768px) { .sd-wrap { left: 260px; } }
+        @media (min-width: 768px) {
+          .sd-wrap { top: 0; left: 260px; }
+        }
         .sd-body {
           flex: 1;
           overflow-y: auto;
@@ -71,30 +75,51 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
 
       <div className="sd-wrap">
 
-        {/* ── HEADER — fixed at top ── */}
-        <div style={{flexShrink:0, background:tc.bg, borderBottom:`1px solid ${tc.color}22`}}>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 16px 0'}}>
-            <button onClick={onBack} style={{display:'flex',alignItems:'center',gap:6,background:'rgba(0,0,0,0.3)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:20,padding:'6px 12px 6px 8px',color:'var(--text)',fontSize:14,fontWeight:500,cursor:'pointer'}}>
+        {/* ── HERO HEADER ── */}
+        <div style={{flexShrink:0, position:'relative', overflow:'hidden',
+          background: `linear-gradient(135deg, ${tc.color}28 0%, ${tc.color}08 60%, var(--bg) 100%)`,
+          borderBottom:`1px solid ${tc.color}30`,
+          minHeight: 160,
+        }}>
+          {/* Decorative background shape */}
+          <div style={{
+            position:'absolute', top:-40, right:-40,
+            width:180, height:180, borderRadius:'50%',
+            background:`${tc.color}12`, pointerEvents:'none',
+          }}/>
+          <div style={{
+            position:'absolute', bottom:-20, left:-20,
+            width:100, height:100, borderRadius:'50%',
+            background:`${tc.color}08`, pointerEvents:'none',
+          }}/>
+
+          {/* Nav row */}
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'14px 16px 0',position:'relative',zIndex:1}}>
+            <button onClick={onBack} style={{display:'flex',alignItems:'center',gap:6,background:'rgba(0,0,0,0.25)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:20,padding:'6px 12px 6px 8px',color:'var(--text)',fontSize:13,fontWeight:500,cursor:'pointer',backdropFilter:'blur(8px)'}}>
               ← Week {wkIdx+1}
             </button>
-            {isDone&&<div style={{background:'var(--green)',color:'#0A0A0A',borderRadius:20,padding:'5px 12px',fontSize:11,fontFamily:'DM Mono,monospace',fontWeight:700,letterSpacing:1}}>DONE</div>}
+            {isDone&&<div style={{background:'var(--green)',color:'#0A0A0A',borderRadius:20,padding:'5px 12px',fontSize:11,fontFamily:'DM Mono,monospace',fontWeight:700,letterSpacing:1}}>✓ DONE</div>}
           </div>
-          <div style={{padding:'12px 18px 18px'}}>
-            <div style={{fontFamily:'Archivo Black,sans-serif',fontSize:26,lineHeight:1.1,letterSpacing:'-.5px',marginBottom:8}}>{s.name}</div>
-            <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:12}}>
+
+          {/* Title + pills */}
+          <div style={{padding:'10px 18px 0',position:'relative',zIndex:1}}>
+            <div style={{fontFamily:'Archivo Black,sans-serif',fontSize:26,lineHeight:1.1,letterSpacing:'-.5px',marginBottom:8,color:'var(--text)'}}>{s.name}</div>
+            <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:14}}>
               {isGym
-                ? <Pill color="#06B6D4" bg="rgba(6,182,212,.2)">GYM</Pill>
+                ? <Pill color="#06B6D4" bg="rgba(6,182,212,.25)">GYM</Pill>
                 : <>
-                    <Pill color={tc.color} bg={`${tc.color}30`}>{tc.label}</Pill>
+                    <Pill color={tc.color} bg={`${tc.color}35`}>{tc.label}</Pill>
                     <Pill color={s.hard?'#EF4444':'var(--green)'} bg={s.hard?'rgba(239,68,68,.2)':'rgba(0,196,106,.2)'}>{s.hard?'HARD':'EASY'}</Pill>
                   </>
               }
             </div>
-            <div style={{display:'flex',gap:8,overflowX:'auto',scrollbarWidth:'none',paddingBottom:2}}>
-              <StatChip label="DURATION" val={s.target.split('·')[0].trim()}/>
-              {s.target.includes('HR')&&<StatChip label="HR CAP" val={(s.target.match(/(\d+)bpm/)||[])[1]?((s.target.match(/(\d+)bpm/)||[])[1]+'bpm'):'132bpm'}/>}
-              <StatChip label="PHASE" val={(plan?.weeks[wkIdx]?.phase||'').split('·').pop().trim().slice(0,18)||'—'}/>
-            </div>
+          </div>
+
+          {/* Stat chips row */}
+          <div style={{display:'flex',gap:8,padding:'0 16px 16px',overflowX:'auto',scrollbarWidth:'none',position:'relative',zIndex:1}}>
+            <StatChip label="DURATION" val={s.target.split('·')[0].trim()} color={tc.color}/>
+            {s.target.includes('HR')&&<StatChip label="HR CAP" val={(s.target.match(/(\d+)bpm/)||[])[1]?((s.target.match(/(\d+)bpm/)||[])[1]+'bpm'):'132bpm'} color={tc.color}/>}
+            {s.target.includes('·')&&<StatChip label="TARGET" val={s.target.split('·').slice(1).join('·').trim().slice(0,22)} color={tc.color}/>}
           </div>
         </div>
 
@@ -192,7 +217,7 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
 }
 
 function Pill({color,bg,children}){return<span style={{fontSize:10,fontFamily:'DM Mono,monospace',padding:'3px 8px',borderRadius:5,background:bg,color,fontWeight:700,letterSpacing:1}}>{children}</span>;}
-function StatChip({label,val}){return<div style={{background:'rgba(0,0,0,0.3)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:10,padding:'9px 12px',flexShrink:0,minWidth:90}}><div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'rgba(244,244,242,0.4)',letterSpacing:2,marginBottom:3}}>{label}</div><div style={{fontSize:13,fontWeight:700,color:'var(--text)'}}>{val}</div></div>;}
+function StatChip({label,val,color}){return<div style={{background:'rgba(0,0,0,0.25)',border:`1px solid ${color||'rgba(255,255,255,0.1)'}40`,borderRadius:10,padding:'9px 12px',flexShrink:0,minWidth:80,backdropFilter:'blur(8px)'}}><div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:color||'rgba(244,244,242,0.4)',letterSpacing:2,marginBottom:4,opacity:0.7}}>{label}</div><div style={{fontSize:14,fontWeight:700,color:'var(--text)'}}>{val}</div></div>;}
 function LInput({label,val,set,type='text',placeholder,step}){
   return<div><label style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--muted)',letterSpacing:2,display:'block',marginBottom:4}}>{label}</label>
     <input type={type} value={val} onChange={e=>set(e.target.value)} placeholder={placeholder} step={step} style={{width:'100%',background:'var(--surface)',border:'1.5px solid var(--border)',borderRadius:8,color:'var(--text)',fontFamily:'DM Mono,monospace',fontSize:16,padding:'9px 10px',outline:'none'}}/>
