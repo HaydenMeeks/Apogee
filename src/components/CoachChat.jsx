@@ -50,7 +50,7 @@ export default function CoachChat({ plan, completions, weekRatings, onClose }) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 300, background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
       {/* Header */}
-      <div style={{ padding: '16px 16px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+      <div style={{ padding: '16px 16px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, padding: '10px 16px', paddingTop: 'calc(10px + env(safe-area-inset-top, 0px))' }}>
         <div>
           <div style={{ fontSize: 16, fontWeight: 700 }}>Coach</div>
           <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 9, color: S.muted, letterSpacing: 2, marginTop: 1 }}>POWERED BY CLAUDE</div>
