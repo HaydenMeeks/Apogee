@@ -114,7 +114,7 @@ export default function PlanTab({ plan, completions, gymLogs, curWk, setCurWk, t
             <div className="celeb-badge" style={{textAlign:'center'}}>
               <div style={{fontSize:64,marginBottom:8}}>🏔️</div>
               <div style={{fontFamily:'Archivo Black,sans-serif',fontSize:28,color:'#00C46A',letterSpacing:2,textShadow:'0 0 30px rgba(0,196,106,0.8)'}}>WEEK DONE</div>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:12,color:'rgba(244,244,242,0.6)',marginTop:8,letterSpacing:2}}>SUMMIT REACHED</div>
+              <div style={{fontFamily:'Exo 2, sans-serif',fontSize:12,color:'rgba(244,244,242,0.6)',marginTop:8,letterSpacing:2}}>SUMMIT REACHED</div>
             </div>
           </div>
         </div>
@@ -125,11 +125,11 @@ export default function PlanTab({ plan, completions, gymLogs, curWk, setCurWk, t
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
           <div style={{display:'flex',alignItems:'center',gap:8}}>
             <button onClick={()=>setCurWk(Math.max(0,curWk-1))} style={{width:34,height:34,borderRadius:9,background:'var(--card)',border:'1px solid var(--border)',color:'var(--text)',fontSize:18,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>‹</button>
-            <span style={{fontFamily:'DM Mono,monospace',fontSize:11,color:'var(--muted)'}}>{wkRange(plan.meta.startDate,curWk)}</span>
+            <span style={{fontFamily:'Exo 2, sans-serif',fontSize:11,color:'var(--muted)',display:'inline-block',width:130,textAlign:'center'}}>{wkRange(plan.meta.startDate,curWk)}</span>
             <button onClick={()=>setCurWk(Math.min(plan.weeks.length-1,curWk+1))} style={{width:34,height:34,borderRadius:9,background:'var(--card)',border:'1px solid var(--border)',color:'var(--text)',fontSize:18,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}>›</button>
-            {!isCurrent&&<button onClick={()=>setCurWk(getCurWk(plan))} style={{height:34,padding:'0 12px',borderRadius:9,background:'var(--gd)',border:'1px solid var(--green)',color:'var(--green)',fontSize:10,fontFamily:'DM Mono,monospace',fontWeight:700,letterSpacing:1,cursor:'pointer'}}>NOW</button>}
+            {!isCurrent&&<button onClick={()=>setCurWk(getCurWk(plan))} style={{height:34,padding:'0 12px',borderRadius:9,background:'var(--gd)',border:'1px solid var(--green)',color:'var(--green)',fontSize:10,fontFamily:'Exo 2, sans-serif',fontWeight:700,letterSpacing:1,cursor:'pointer'}}>NOW</button>}
           </div>
-          <div style={{height:34,display:'flex',alignItems:'center',padding:'0 12px',background:isCurrent?'var(--gd)':'var(--card)',border:`1px solid ${isCurrent?'var(--green)':'var(--border)'}`,borderRadius:9,fontFamily:'DM Mono,monospace',fontSize:10,color:isCurrent?'var(--green)':'var(--muted)',fontWeight:700,letterSpacing:1}}>
+          <div style={{height:34,display:'flex',alignItems:'center',padding:'0 12px',background:isCurrent?'var(--gd)':'var(--card)',border:`1px solid ${isCurrent?'var(--green)':'var(--border)'}`,borderRadius:9,fontFamily:'Exo 2, sans-serif',fontSize:10,color:isCurrent?'var(--green)':'var(--muted)',fontWeight:700,letterSpacing:1}}>
             WK {w.week}{isCurrent?' · NOW':''}
           </div>
         </div>
@@ -146,21 +146,21 @@ export default function PlanTab({ plan, completions, gymLogs, curWk, setCurWk, t
           ].map((k,i)=>(
             <div key={i} style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:10,padding:'10px 8px'}}>
               <div style={{fontFamily:'Archivo Black,sans-serif',fontSize:20,lineHeight:1,color:k.hit?'var(--green)':'var(--text)'}}>{k.val}</div>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:7,color:'var(--muted)',letterSpacing:.5,marginTop:3}}>{k.lbl}</div>
+              <div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)',letterSpacing:.5,marginTop:3}}>{k.lbl}</div>
             </div>
           ))}
         </div>
 
         {/* Progress bars */}
         <div style={{marginBottom:2}}>
-          <div style={{display:'flex',justifyContent:'space-between',fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--muted)',marginBottom:3}}>
+          <div style={{display:'flex',justifyContent:'space-between',fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)',marginBottom:3}}>
             <span>{done}/{nonRest.length} sessions</span><span>{pct}%</span>
           </div>
           <div style={{height:3,background:'var(--border)',borderRadius:2,overflow:'hidden',marginBottom:6}}>
             <div style={{width:`${pct}%`,height:'100%',background:'var(--green)',borderRadius:2,transition:'width .5s ease'}}/>
           </div>
           {tHrs>0&&<>
-            <div style={{display:'flex',justifyContent:'space-between',fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--muted)',marginBottom:3}}>
+            <div style={{display:'flex',justifyContent:'space-between',fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)',marginBottom:3}}>
               <span>Hours</span><span>{logHrs.toFixed(1)}/{tHrs}hrs</span>
             </div>
             <div style={{height:3,background:'var(--border)',borderRadius:2,overflow:'hidden'}}>
@@ -196,12 +196,12 @@ export default function PlanTab({ plan, completions, gymLogs, curWk, setCurWk, t
 
         {/* Log extra run */}
         <div style={{marginTop:12}}>
-          <button onClick={()=>setExtraLog(!extraLog)} style={{width:'100%',background:'transparent',border:'1px dashed var(--border)',borderRadius:10,padding:'10px',fontSize:12,color:'var(--muted)',cursor:'pointer',fontFamily:'DM Mono,monospace',letterSpacing:1}}>
+          <button onClick={()=>setExtraLog(!extraLog)} style={{width:'100%',background:'transparent',border:'1px dashed var(--border)',borderRadius:10,padding:'10px',fontSize:12,color:'var(--muted)',cursor:'pointer',fontFamily:'Exo 2, sans-serif',letterSpacing:1}}>
             + LOG EXTRA RUN
           </button>
           {extraLog&&(
             <div style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:12,padding:14,marginTop:8}}>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--muted)',letterSpacing:3,marginBottom:10}}>EXTRA RUN</div>
+              <div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)',letterSpacing:3,marginBottom:10}}>EXTRA RUN</div>
               {/* Type pills */}
               <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:12}}>
                 {RUN_TYPES.map(t=>{
@@ -209,7 +209,7 @@ export default function PlanTab({ plan, completions, gymLogs, curWk, setCurWk, t
                   const active = extraType === t.val;
                   return(
                     <button key={t.val} onClick={()=>setExtraType(t.val)} style={{
-                      padding:'5px 10px',borderRadius:6,fontSize:10,fontFamily:'DM Mono,monospace',fontWeight:600,cursor:'pointer',
+                      padding:'5px 10px',borderRadius:6,fontSize:10,fontFamily:'Exo 2, sans-serif',fontWeight:600,cursor:'pointer',
                       background:active?tc.bg:'transparent',
                       color:active?tc.color:'var(--muted)',
                       border:`1px solid ${active?tc.color:'var(--border)'}`,
@@ -219,12 +219,12 @@ export default function PlanTab({ plan, completions, gymLogs, curWk, setCurWk, t
               </div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:12}}>
                 <div>
-                  <label style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--muted)',letterSpacing:2,display:'block',marginBottom:4}}>TIME (min)</label>
-                  <input type="number" value={extraTime} onChange={e=>setExtraTime(e.target.value)} placeholder="60" style={{width:'100%',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:8,color:'var(--text)',fontFamily:'DM Mono,monospace',fontSize:16,padding:'9px 10px',outline:'none'}}/>
+                  <label style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)',letterSpacing:2,display:'block',marginBottom:4}}>TIME (min)</label>
+                  <input type="number" value={extraTime} onChange={e=>setExtraTime(e.target.value)} placeholder="60" style={{width:'100%',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:8,color:'var(--text)',fontFamily:'Exo 2, sans-serif',fontSize:16,padding:'9px 10px',outline:'none'}}/>
                 </div>
                 <div>
-                  <label style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--muted)',letterSpacing:2,display:'block',marginBottom:4}}>KM</label>
-                  <input type="number" value={extraDist} onChange={e=>setExtraDist(e.target.value)} placeholder="—" step="0.1" style={{width:'100%',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:8,color:'var(--text)',fontFamily:'DM Mono,monospace',fontSize:16,padding:'9px 10px',outline:'none'}}/>
+                  <label style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)',letterSpacing:2,display:'block',marginBottom:4}}>KM</label>
+                  <input type="number" value={extraDist} onChange={e=>setExtraDist(e.target.value)} placeholder="—" step="0.1" style={{width:'100%',background:'var(--surface)',border:'1px solid var(--border)',borderRadius:8,color:'var(--text)',fontFamily:'Exo 2, sans-serif',fontSize:16,padding:'9px 10px',outline:'none'}}/>
                 </div>
               </div>
               <div style={{display:'flex',gap:8}}>
@@ -243,9 +243,14 @@ function CoachNote({ note }) {
   const [open, setOpen] = useState(false);
   const preview = note.split('\n')[0].slice(0, 90);
   return (
-    <div style={{margin:'0 12px 12px',background:'var(--card)',border:'1px solid var(--border)',borderLeft:'2px solid var(--green)',borderRadius:10,overflow:'hidden'}}>
-      <button onClick={()=>setOpen(!open)} style={{width:'100%',padding:'11px 13px',display:'flex',alignItems:'flex-start',gap:8,background:'transparent',border:'none',cursor:'pointer',textAlign:'left'}}>
-        <span style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--green)',letterSpacing:3,fontWeight:700,flexShrink:0,marginTop:1}}>COACH</span>
+    <div style={{margin:'0 12px 12px',background:'var(--card)',border:'1px solid var(--border)',borderRadius:10,overflow:'hidden'}}>
+      {/* Green tinted header row */}
+      <div style={{display:'flex',alignItems:'center',gap:8,padding:'7px 13px',background:'rgba(0,196,106,0.08)',borderBottom:'1px solid rgba(0,196,106,0.12)'}}>
+        <span style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--green)',letterSpacing:3,fontWeight:700}}>COACH</span>
+        <div style={{width:4,height:4,borderRadius:'50%',background:'var(--green)',opacity:0.4}}/>
+        <span style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'rgba(0,196,106,0.5)',letterSpacing:2,fontWeight:600}}>WEEK NOTE</span>
+      </div>
+      <button onClick={()=>setOpen(!open)} style={{width:'100%',padding:'10px 13px',display:'flex',alignItems:'flex-start',gap:8,background:'transparent',border:'none',cursor:'pointer',textAlign:'left'}}>
         <span style={{fontSize:13,color:'var(--text2)',lineHeight:1.6,flex:1}}>{open?note:preview+(note.length>90?'…':'')}</span>
         <span style={{color:'var(--muted)',fontSize:12,marginTop:1,flexShrink:0,transform:open?'rotate(180deg)':'none',transition:'transform .2s'}}>▾</span>
       </button>
@@ -254,7 +259,7 @@ function CoachNote({ note }) {
 }
 
 function SectionLabel({ children }) {
-  return <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--green)',letterSpacing:3,fontWeight:700,margin:'12px 0 8px',paddingLeft:2}}>{children}</div>;
+  return <div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--green)',letterSpacing:3,fontWeight:700,margin:'12px 0 8px',paddingLeft:2}}>{children}</div>;
 }
 
 function SessionRow({ session: s, completion, onTap }) {
@@ -269,15 +274,15 @@ function SessionRow({ session: s, completion, onTap }) {
       <div style={{width:7,height:7,borderRadius:'50%',background:tc.color,flexShrink:0}}/>
       <div style={{flex:1,minWidth:0}}>
         <div style={{fontSize:15,fontWeight:700,letterSpacing:'-.2px',color:'var(--text)'}}>{displayName}</div>
-        <div style={{fontFamily:'DM Mono,monospace',fontSize:11,color:'var(--muted)',marginTop:2}}>{s.target.replace(/^OPTIONAL\s*[—-]\s*/i,'').split('·')[0].trim()}</div>
+        <div style={{fontFamily:'DM Sans, sans-serif',fontWeight:400,fontSize:12,color:'var(--muted)',marginTop:2}}>{s.target.replace(/^OPTIONAL\s*[—-]\s*/i,'').split('·')[0].trim()}</div>
         {isDone&&!s.isGym&&(completion?.time||completion?.dist)&&(
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:11,color:'var(--green)',marginTop:2}}>
+          <div style={{fontFamily:'Exo 2, sans-serif',fontSize:11,color:'var(--green)',marginTop:2}}>
             {completion.time||''}{completion.dist?' · '+parseFloat(completion.dist).toFixed(1)+'km':''}
           </div>
         )}
       </div>
       <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:4,flexShrink:0}}>
-        <span style={{fontSize:9,fontFamily:'DM Mono,monospace',background:tc.bg,color:tc.color,padding:'2px 7px',borderRadius:5,fontWeight:600}}>{tc.label}</span>
+        <span style={{fontSize:10,fontFamily:'Exo 2, sans-serif',background:tc.bg,color:tc.color,padding:'2px 7px',borderRadius:5,fontWeight:600}}>{tc.label}</span>
         <span style={{color:'var(--muted)',fontSize:14}}>›</span>
       </div>
     </button>
