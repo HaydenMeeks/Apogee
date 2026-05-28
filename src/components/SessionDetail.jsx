@@ -108,7 +108,7 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
             <button onClick={onBack} style={{display:'flex',alignItems:'center',gap:6,background:'rgba(0,0,0,0.25)',border:'1px solid rgba(255,255,255,0.1)',borderRadius:20,padding:'6px 12px 6px 8px',color:'var(--text)',fontSize:13,fontWeight:500,cursor:'pointer',backdropFilter:'blur(8px)'}}>
               ← Week {wkIdx+1}
             </button>
-            {isDone&&<div style={{background:'var(--green)',color:'#0A0A0A',borderRadius:20,padding:'5px 12px',fontSize:11,fontFamily:'DM Mono,monospace',fontWeight:700,letterSpacing:1}}>✓ DONE</div>}
+            {isDone&&<div style={{background:'var(--green)',color:'#0A0A0A',borderRadius:20,padding:'5px 12px',fontSize:11,fontFamily:'Exo 2, sans-serif',fontWeight:700,letterSpacing:1}}>✓ DONE</div>}
           </div>
 
           {/* Title + pills */}
@@ -152,14 +152,19 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
         <div className="sd-body" style={{padding:'14px 14px 24px'}}>
 
           {/* Coach note */}
-          <div style={{background:'var(--card)',border:'1px solid var(--border)',borderLeft:'2px solid var(--green)',borderRadius:12,marginBottom:12,overflow:'hidden'}}>
-            <button onClick={()=>setNoteOpen(!noteOpen)} style={{width:'100%',padding:'12px 14px',display:'flex',alignItems:'flex-start',gap:10,background:'transparent',border:'none',cursor:'pointer',textAlign:'left'}}>
-              <span style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--green)',letterSpacing:3,fontWeight:700,flexShrink:0,marginTop:1}}>COACH</span>
+          <div style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:12,marginBottom:12,overflow:'hidden'}}>
+            <div style={{display:'flex',alignItems:'center',gap:8,padding:'7px 14px',background:'rgba(0,196,106,0.08)',borderBottom:'1px solid rgba(0,196,106,0.12)'}}>
+              <span style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--green)',letterSpacing:3,fontWeight:700}}>COACH</span>
+              <div style={{width:4,height:4,borderRadius:'50%',background:'var(--green)',opacity:0.4}}/>
+              <span style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'rgba(0,196,106,0.5)',letterSpacing:2,fontWeight:600}}>SESSION NOTE</span>
+            </div>
+            <button onClick={()=>setNoteOpen(!noteOpen)} style={{width:'100%',padding:'10px 14px',display:'flex',alignItems:'flex-start',gap:10,background:'transparent',border:'none',cursor:'pointer',textAlign:'left'}}>
+              <span style={{display:'none'}}>COACH</span>
               <div style={{flex:1,fontSize:13,color:'var(--text2)',lineHeight:1.6}}>
                 {noteOpen?(
                   <>
-                    {focusParts.purpose&&<><div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--green)',letterSpacing:2,marginBottom:3}}>PURPOSE</div><p style={{marginBottom:10}}>{focusParts.purpose}</p></>}
-                    {focusParts.cue&&<><div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'#F59E0B',letterSpacing:2,marginBottom:3}}>KEY CUE</div><p>{focusParts.cue}</p></>}
+                    {focusParts.purpose&&<><div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--green)',letterSpacing:2,marginBottom:3}}>PURPOSE</div><p style={{marginBottom:10}}>{focusParts.purpose}</p></>}
+                    {focusParts.cue&&<><div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'#F59E0B',letterSpacing:2,marginBottom:3}}>KEY CUE</div><p>{focusParts.cue}</p></>}
                     {focusParts.rest&&<p>{focusParts.rest}</p>}
                   </>
                 ):(
@@ -173,11 +178,11 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
           {/* Gym exercise preview */}
           {isGym&&s.gymSession?.exercises&&(
             <div style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:12,padding:14,marginBottom:12}}>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'#06B6D4',letterSpacing:3,marginBottom:10,fontWeight:700}}>PRESCRIBED</div>
+              <div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'#06B6D4',letterSpacing:3,marginBottom:10,fontWeight:700}}>PRESCRIBED</div>
               {s.gymSession.exercises.map((ex,i)=>(
                 <div key={i} style={{padding:'8px 0',borderBottom:i<s.gymSession.exercises.length-1?`1px solid var(--border)`:'none'}}>
                   <div style={{fontSize:14,fontWeight:600,marginBottom:2,color:'var(--text)'}}>{ex.name}</div>
-                  <div style={{fontFamily:'DM Mono,monospace',fontSize:10,color:'var(--muted)'}}>
+                  <div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)'}}>
                     <span style={{color:'var(--green)'}}>{ex.sets}×{ex.reps}</span> @ {ex.load}{ex.rest?` · ${ex.rest}`:''}
                   </div>
                 </div>
@@ -188,7 +193,7 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
           {/* Run / Vest log */}
           {!isGym&&!isDone&&(
             <div style={{background:'var(--card)',border:'1px solid var(--border)',borderRadius:12,padding:14,marginBottom:12}}>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--muted)',letterSpacing:3,marginBottom:10}}>
+              <div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)',letterSpacing:3,marginBottom:10}}>
                 {isVest ? 'LOG THIS SESSION' : 'LOG THIS SESSION'}
               </div>
               {isVest ? (
@@ -197,7 +202,7 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
                   <LInput label="PACK WEIGHT (kg)" type="number" placeholder="8" val={vestWeight} set={setVestWeight} step="0.5"/>
                   <LInput label="VERT (m)" type="number" placeholder="400" val={vestVert} set={setVestVert}/>
                   <div style={{display:'flex',alignItems:'flex-end'}}>
-                    <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--muted)',lineHeight:1.4}}>Track vert in Coros. Log total elevation gain.</div>
+                    <div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)',lineHeight:1.4}}>Track vert in Coros. Log total elevation gain.</div>
                   </div>
                 </div>
               ) : (
@@ -212,12 +217,12 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
           {/* Done summary */}
           {isDone&&!isGym&&(completion?.time||completion?.dist||completion?.vestVert||completion?.vestWeight)&&(
             <div style={{background:'var(--card)',border:'1px solid var(--green)',borderRadius:12,padding:14,marginBottom:12}}>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--green)',letterSpacing:3,marginBottom:8}}>LOGGED</div>
+              <div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--green)',letterSpacing:3,marginBottom:8}}>LOGGED</div>
               <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
-                {completion.time&&<div><div style={{fontFamily:'Archivo Black,sans-serif',fontSize:22,color:'var(--text)'}}>{completion.time}</div><div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'var(--muted)'}}>TIME</div></div>}
-                {!isVest&&completion.dist&&parseFloat(completion.dist)>0&&<div><div style={{fontFamily:'Archivo Black,sans-serif',fontSize:22,color:'var(--text)'}}>{parseFloat(completion.dist).toFixed(1)}km</div><div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'var(--muted)'}}>DIST</div></div>}
-                {isVest&&completion.vestWeight&&<div><div style={{fontFamily:'Archivo Black,sans-serif',fontSize:22,color:'var(--text)'}}>{completion.vestWeight}kg</div><div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'var(--muted)'}}>PACK</div></div>}
-                {isVest&&completion.vestVert&&<div><div style={{fontFamily:'Archivo Black,sans-serif',fontSize:22,color:'var(--text)'}}>{completion.vestVert}m</div><div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:'var(--muted)'}}>VERT</div></div>}
+                {completion.time&&<div><div style={{fontFamily:'Archivo Black,sans-serif',fontSize:22,color:'var(--text)'}}>{completion.time}</div><div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)'}}>TIME</div></div>}
+                {!isVest&&completion.dist&&parseFloat(completion.dist)>0&&<div><div style={{fontFamily:'Archivo Black,sans-serif',fontSize:22,color:'var(--text)'}}>{parseFloat(completion.dist).toFixed(1)}km</div><div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)'}}>DIST</div></div>}
+                {isVest&&completion.vestWeight&&<div><div style={{fontFamily:'Archivo Black,sans-serif',fontSize:22,color:'var(--text)'}}>{completion.vestWeight}kg</div><div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)'}}>PACK</div></div>}
+                {isVest&&completion.vestVert&&<div><div style={{fontFamily:'Archivo Black,sans-serif',fontSize:22,color:'var(--text)'}}>{completion.vestVert}m</div><div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)'}}>VERT</div></div>}
               </div>
             </div>
           )}
@@ -255,10 +260,10 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
   );
 }
 
-function Pill({color,bg,children}){return<span style={{fontSize:10,fontFamily:'DM Mono,monospace',padding:'3px 8px',borderRadius:5,background:bg,color,fontWeight:700,letterSpacing:1}}>{children}</span>;}
-function StatChip({label,val,color}){return<div style={{background:'rgba(0,0,0,0.25)',border:`1px solid ${color||'rgba(255,255,255,0.1)'}40`,borderRadius:10,padding:'9px 12px',flexShrink:0,minWidth:80,backdropFilter:'blur(8px)'}}><div style={{fontFamily:'DM Mono,monospace',fontSize:8,color:color||'rgba(244,244,242,0.4)',letterSpacing:2,marginBottom:4,opacity:0.7}}>{label}</div><div style={{fontSize:14,fontWeight:700,color:'var(--text)'}}>{val}</div></div>;}
+function Pill({color,bg,children}){return<span style={{fontSize:10,fontFamily:'Exo 2, sans-serif',padding:'3px 8px',borderRadius:5,background:bg,color,fontWeight:700,letterSpacing:1}}>{children}</span>;}
+function StatChip({label,val,color}){return<div style={{background:'rgba(0,0,0,0.25)',border:`1px solid ${color||'rgba(255,255,255,0.1)'}40`,borderRadius:10,padding:'9px 12px',flexShrink:0,minWidth:80,backdropFilter:'blur(8px)'}}><div style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:color||'rgba(244,244,242,0.4)',letterSpacing:2,marginBottom:4,opacity:0.7}}>{label}</div><div style={{fontSize:14,fontWeight:700,color:'var(--text)'}}>{val}</div></div>;}
 function LInput({label,val,set,type='text',placeholder,step}){
-  return<div><label style={{fontFamily:'DM Mono,monospace',fontSize:9,color:'var(--muted)',letterSpacing:2,display:'block',marginBottom:4}}>{label}</label>
-    <input type={type} value={val} onChange={e=>set(e.target.value)} placeholder={placeholder} step={step} style={{width:'100%',background:'var(--surface)',border:'1.5px solid var(--border)',borderRadius:8,color:'var(--text)',fontFamily:'DM Mono,monospace',fontSize:16,padding:'9px 10px',outline:'none'}}/>
+  return<div><label style={{fontFamily:'Exo 2, sans-serif',fontSize:10,color:'var(--muted)',letterSpacing:2,display:'block',marginBottom:4}}>{label}</label>
+    <input type={type} value={val} onChange={e=>set(e.target.value)} placeholder={placeholder} step={step} style={{width:'100%',background:'var(--surface)',border:'1.5px solid var(--border)',borderRadius:8,color:'var(--text)',fontFamily:'Exo 2, sans-serif',fontSize:16,padding:'9px 10px',outline:'none'}}/>
   </div>;
 }
