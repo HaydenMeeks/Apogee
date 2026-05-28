@@ -30,14 +30,23 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
 
   // ── REST TIMER ──────────────────────────────────────────────────────────────
   // Unlock audio on first tap — iOS requires a real play() call from a user gesture
+  // Use a silent 1-second blank audio buffer instead of the actual track
   const audioUnlockedRef = useRef(false);
   function unlockAudio() {
     if (audioUnlockedRef.current) return;
     try {
+      // Create a silent AudioContext buffer to unlock — doesn't play the mp3
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+      // Pre-load the actual audio file ready to go
       const a = new Audio('/timer-end.mp3');
-      a.volume = 0;
-      const p = a.play();
-      if (p) p.then(() => { a.pause(); a.currentTime = 0; a.volume = 0.8; endAudioRef.current = a; }).catch(() => {});
+      a.volume = 0.8;
+      a.load();
+      endAudioRef.current = a;
       audioUnlockedRef.current = true;
     } catch(e) {}
   }
