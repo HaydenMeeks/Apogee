@@ -246,18 +246,26 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
           }} title="Exercise history">📋</button>
         </div>
 
-        {/* Video link */}
-        {ex?.videoUrl && (
-          <a href={ex.videoUrl} target="_blank" rel="noopener noreferrer" style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontFamily: 'DM Mono, monospace', fontSize: 9, color: 'var(--muted)',
-            letterSpacing: 1, textDecoration: 'none', marginBottom: 10,
-            border: '1px solid var(--border)', borderRadius: 6, padding: '4px 10px',
-            background: 'var(--card)',
-          }}>
-            ▶ WATCH DEMO
-          </a>
-        )}
+        {/* Embedded YouTube video */}
+        {ex?.videoUrl && (()=>{
+          const videoId = ex.videoUrl.match(/(?:v=|youtu\.be\/)([^&?/]+)/)?.[1];
+          return videoId ? (
+            <div style={{
+              position: 'relative', width: '100%', paddingBottom: '56.25%',
+              borderRadius: 10, overflow: 'hidden', marginBottom: 12,
+              background: '#000',
+            }}>
+              <iframe
+                src={`https://www.youtube.com/embed/${videoId}?playsinline=1&rel=0&modestbranding=1`}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                loading="lazy"
+                title={ex.name}
+              />
+            </div>
+          ) : null;
+        })()}
 
         {/* Coaching cue */}
         {ex?.coaching && (
