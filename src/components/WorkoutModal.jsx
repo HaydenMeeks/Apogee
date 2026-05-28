@@ -26,7 +26,8 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
   const restEndTime = useRef(null); // wall clock end time
   const [historyEx, setHistoryEx] = useState(null);
   const [showVideo, setShowVideo] = useState(false);
-  const [showSummary, setShowSummary] = useState(false); // exercise name for history modal
+  const [showSummary, setShowSummary] = useState(false);
+  const [showIncompletePrompt, setShowIncompletePrompt] = useState(false); // exercise name for history modal
   const [historyData, setHistoryData] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
   const timerRef = useRef(null);
@@ -63,6 +64,14 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
         audio.currentTime = 0;
         audio.volume = 0.8;
         endAudioRef.current = audio;
+        // When clip ends, try to hand audio focus back to Spotify
+        audio.onended = () => {
+          try {
+            if (navigator.mediaSession?.callAction) {
+              navigator.mediaSession.callAction('play');
+            }
+          } catch(e) {}
+        };
         audio.play().catch(() => {});
       } catch(e) {}
     }
@@ -312,11 +321,20 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
         {ex?.coaching && (
           <div style={{
             background: 'var(--card)', border: '1px solid var(--border)',
-            borderLeft: '2px solid var(--green)', borderRadius: 10,
-            padding: '10px 12px', marginBottom: 14,
-            fontSize: 12, color: 'var(--text2)', lineHeight: 1.6,
+            borderRadius: 10, marginBottom: 14, overflow: 'hidden',
           }}>
-            {ex.coaching}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '6px 12px', background: 'rgba(0,196,106,0.08)',
+              borderBottom: '1px solid rgba(0,196,106,0.12)',
+            }}>
+              <span style={{ fontFamily: 'Exo 2, sans-serif', fontWeight: 700, fontSize: 10, color: 'var(--green)', letterSpacing: 3 }}>COACH</span>
+              <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--green)', opacity: 0.4 }}/>
+              <span style={{ fontFamily: 'Exo 2, sans-serif', fontWeight: 600, fontSize: 10, color: 'rgba(0,196,106,0.5)', letterSpacing: 2 }}>CUE</span>
+            </div>
+            <div style={{ padding: '10px 12px', fontSize: 13, color: 'var(--text2)', lineHeight: 1.6 }}>
+              {ex.coaching}
+            </div>
           </div>
         )}
 
@@ -435,17 +453,18 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
             borderRadius: 13, padding: 16, color: 'var(--text)', fontSize: 14,
             fontWeight: 600, cursor: 'pointer',
           }}>
-            Next Exercise →
+            Next →
           </button>
         ) : null}
-        <button onClick={handleComplete} disabled={!allDone} style={{
+        <button onClick={() => allDone ? handleComplete() : setShowIncompletePrompt(true)} style={{
           flex: 2, background: allDone ? 'var(--green)' : 'var(--card)',
-          border: 'none', borderRadius: 13, padding: 17,
-          color: allDone ? '#0A0A0A' : 'var(--muted)',
-          fontSize: 16, fontWeight: 800, cursor: allDone ? 'pointer' : 'default',
+          border: allDone ? 'none' : '1px solid var(--border)',
+          borderRadius: 13, padding: 17,
+          color: allDone ? '#0A0A0A' : 'var(--text)',
+          fontSize: 15, fontWeight: 800, cursor: 'pointer',
           transition: 'background 0.3s',
         }}>
-          {allDone ? 'Complete Workout ✓' : `${exercises.filter((_, i) => logs[i]?.every(l => l.done)).length}/${exercises.length} Done`}
+          {allDone ? 'Complete ✓' : `Finish (${exercises.filter((_, i) => logs[i]?.every(l => l.done)).length}/${exercises.length})`}
         </button>
       </div>
 
@@ -535,6 +554,61 @@ export default function WorkoutModal({ session, wkIdx, gymLog, onClose, onComple
             }}>
               Done ✓
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── INCOMPLETE PROMPT ── */}
+      {showIncompletePrompt && (
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 15,
+          background: 'rgba(0,0,0,0.7)', display: 'flex',
+          alignItems: 'flex-end', backdropFilter: 'blur(4px)',
+        }}>
+          <div style={{
+            width: '100%', background: 'var(--card)',
+            borderRadius: '20px 20px 0 0', padding: '20px 16px',
+            paddingBottom: 'calc(20px + env(safe-area-inset-bottom, 0px))',
+          }}>
+            <div style={{ fontFamily: 'Archivo Black, sans-serif', fontSize: 18, color: 'var(--text)', marginBottom: 6 }}>
+              Finish early?
+            </div>
+            <div style={{ fontSize: 13, color: 'var(--text2)', lineHeight: 1.5, marginBottom: 14 }}>
+              The following exercises are incomplete:
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              {exercises.map((ex, i) => {
+                const done = logs[i]?.every(l => l.done);
+                const partial = logs[i]?.some(l => l.done) && !done;
+                if (done) return null;
+                return (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    padding: '7px 0', borderBottom: '1px solid var(--border)',
+                  }}>
+                    <div style={{
+                      width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
+                      background: partial ? '#F59E0B' : 'var(--border)',
+                    }}/>
+                    <span style={{ fontSize: 13, color: 'var(--text2)' }}>{ex.name}</span>
+                    {partial && <span style={{ fontFamily: 'Exo 2, sans-serif', fontSize: 9, color: '#F59E0B', letterSpacing: 1, marginLeft: 'auto' }}>PARTIAL</span>}
+                    {!partial && <span style={{ fontFamily: 'Exo 2, sans-serif', fontSize: 9, color: 'var(--muted)', letterSpacing: 1, marginLeft: 'auto' }}>SKIPPED</span>}
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button onClick={() => setShowIncompletePrompt(false)} style={{
+                flex: 1, background: 'var(--surface)', border: '1px solid var(--border)',
+                borderRadius: 12, padding: 14, fontSize: 14, color: 'var(--text)',
+                fontWeight: 600, cursor: 'pointer',
+              }}>Keep Going</button>
+              <button onClick={() => { setShowIncompletePrompt(false); handleComplete(); }} style={{
+                flex: 1, background: 'var(--green)', border: 'none',
+                borderRadius: 12, padding: 14, fontSize: 14, color: '#0A0A0A',
+                fontWeight: 800, cursor: 'pointer',
+              }}>Finish Anyway</button>
+            </div>
           </div>
         </div>
       )}
