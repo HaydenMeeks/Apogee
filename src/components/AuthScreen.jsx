@@ -51,7 +51,7 @@ export default function AuthScreen({ onAuth }) {
           <path d="M 60 38 L 88 78 L 60 78 Z" fill="#0A0A0A"/>
         </svg>
         <div style={{ fontFamily: 'Archivo Black, sans-serif', fontSize: 28, letterSpacing: 6, color: S.text }}>APOGEE</div>
-        <div style={{ fontFamily: 'DM Mono, monospace', fontSize: 10, color: S.muted, letterSpacing: 3 }}>TRAINING OS</div>
+        <div style={{ fontFamily: 'Exo 2, sans-serif', fontSize: 10, color: S.muted, letterSpacing: 3 }}>TRAINING OS</div>
       </div>
 
       {/* Card */}
@@ -83,7 +83,7 @@ export default function AuthScreen({ onAuth }) {
 function Field({ label, type, value, onChange, placeholder, onKeyDown }) {
   return (
     <div>
-      <label style={{ fontFamily: 'DM Mono, monospace', fontSize: 9, color: 'rgba(244,244,242,0.4)', letterSpacing: 2, display: 'block', marginBottom: 5 }}>{label.toUpperCase()}</label>
+      <label style={{ fontFamily: 'Exo 2, sans-serif', fontSize: 10, color: 'rgba(244,244,242,0.4)', letterSpacing: 2, display: 'block', marginBottom: 5 }}>{label.toUpperCase()}</label>
       <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} onKeyDown={onKeyDown}
         style={{ width: '100%', background: '#141414', border: '1.5px solid rgba(255,255,255,0.08)', borderRadius: 8, color: '#F4F4F2', fontSize: 15, padding: '10px 12px', outline: 'none', fontFamily: 'inherit' }}
         onFocus={e => e.target.style.borderColor = '#00C46A'}
