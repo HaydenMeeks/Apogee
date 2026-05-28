@@ -32,9 +32,14 @@ export default function SessionDetail({ session:s, wkIdx, plan, completion, gymL
   if(s.focus){
     const m1=s.focus.match(/PURPOSE:(.*?)(?=KEY CUE:|$)/s);
     const m2=s.focus.match(/KEY CUE:(.*?)(?=\n\n|$)/s);
-    if(m1)focusParts.purpose=m1[1].trim();
-    if(m2)focusParts.cue=m2[1].trim();
-    if(!m1&&!m2)focusParts.rest=s.focus;
+    if(m1) focusParts.purpose=m1[1].trim();
+    if(m2) focusParts.cue=m2[1].trim();
+    if(!m1&&!m2) {
+      focusParts.rest=s.focus;
+    } else if(!m1&&m2) {
+      // Has KEY CUE but no PURPOSE label — text before KEY CUE is the main body
+      focusParts.purpose=s.focus.split('KEY CUE:')[0].trim();
+    }
   }
   const preview = (s.focus||'').split('\n')[0].slice(0,220);
 
